@@ -1,0 +1,21 @@
+version: '3.9'
+name: 'bookstore-microservices'
+services:
+  catalog-service:
+    image: amithkashyaprv/bookstore-catalog-service
+    container_name: catalog-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_URL=jdbc:mysql://catalog-db:3306/catalog-db
+      - DB_USERNAME=catalog
+      - DB_PASSWORD=catalog
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700m
