@@ -3,6 +3,7 @@ package com.microservices.bookstore.order_service.controllers;
 import com.microservices.bookstore.order_service.configuration.ApplicationProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,5 +19,8 @@ public class RabbitMQDemoController {
     }
 
     @PostMapping
-    public void sendMessage() {}
+    public void sendMessage(@RequestBody MyMessage myMessage) {}
 }
+
+record MyMessage(String routingKey, MyPayload myPayload) {}
+record MyPayload(String content) {}
