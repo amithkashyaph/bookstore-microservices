@@ -18,9 +18,11 @@ public class RabbitMQDemoController {
         this.applicationProperties = applicationProperties;
     }
 
-    @PostMapping
-    public void sendMessage(@RequestBody MyMessage myMessage) {}
+    @PostMapping("/send")
+    public void sendMessage(@RequestBody MyMessage message) {
+        rabbitTemplate.convertAndSend(applicationProperties.orderEventsExchange(), message.routingKey(), message.payload());
+    }
 }
 
-record MyMessage(String routingKey, MyPayload myPayload) {}
+record MyMessage(String routingKey, MyPayload payload) {}
 record MyPayload(String content) {}
