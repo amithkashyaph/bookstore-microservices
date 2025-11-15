@@ -20,3 +20,14 @@ CREATE TABLE orders (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE order_items (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    code VARCHAR(100) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    quantity INT NOT NULL,
+    order_id BIGINT NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_order_items_orders FOREIGN KEY (order_id) REFERENCES orders(id)
+);
