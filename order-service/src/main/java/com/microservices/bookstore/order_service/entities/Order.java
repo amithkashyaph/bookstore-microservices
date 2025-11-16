@@ -20,4 +20,13 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
+    private String orderNumber;
+
+    @Column(name = "username", nullable = false)
+    private String userName;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    private Set<OrderItem> orderItems;
+
 }
