@@ -42,6 +42,17 @@ public class Order {
             })
     private Customer customer;
 
+    @Embedded
+    @AttributeOverrides(
+            value = {
+                    @AttributeOverride(name = "addressLine1", column = @Column(name = "delivery_address_line1")),
+                    @AttributeOverride(name = "addressLine2", column = @Column(name = "delivery_address_line2")),
+                    @AttributeOverride(name = "city", column = @Column(name = "delivery_address_city")),
+                    @AttributeOverride(name = "state", column = @Column(name = "delivery_address_state")),
+                    @AttributeOverride(name = "zipCode", column = @Column(name = "delivery_address_zip_code")),
+                    @AttributeOverride(name = "country", column = @Column(name = "delivery_address_country")),
+            })
+    private Address deliveryAddress;
 
 
 }
