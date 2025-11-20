@@ -18,4 +18,18 @@ import lombok.Setter;
 @Setter
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    @NotEmpty(message = "Product code is required") private String code;
+
+    @Column(nullable = false)
+    @NotEmpty(message = "Product name cannot be empty") private String name;
+
+    @Column(nullable = false)
+    @NotEmpty(message = "Product description cannot be empty") private String description;
+
+
 }
