@@ -54,5 +54,16 @@ public class Order {
             })
     private Address deliveryAddress;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    private String comments;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
 
 }
