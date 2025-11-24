@@ -31,5 +31,8 @@ public class Product {
     @Column(nullable = false)
     @NotEmpty(message = "Product description cannot be empty") private String description;
 
+    private String imageUrl;
 
+    @Column(nullable = false)
+    @NotNull(message = "Product price is required") @DecimalMin("0.1") private BigDecimal price;
 }
