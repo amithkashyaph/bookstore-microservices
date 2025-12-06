@@ -19,20 +19,16 @@ public class CatalogServiceClient {
         this.restClient = restClient;
     }
 
+    @Retry(name = "catalog-service")
     public Optional<ProductDto> getProductByCode(String code) {
         log.info("Fetching product for code: {}", code);
-        try {
-            var product = restClient
-                    .get()
-                    .uri("/api/products/{code}", code)
-                    .retrieve()
-                    .body(ProductDto.class);
 
-            return Optional.ofNullable(product);
-        } catch (Exception e) {
-            log.error("Error fetching product for code: {}", code);
-            return Optional.empty();
-        }
+        var product = restClient
+                .get()
+                .uri("/api/products/{code}", code)
+                .retrieve()
+                .body(ProductDto.class);
 
+        return Optional.ofNullable(product);
     }
 }
