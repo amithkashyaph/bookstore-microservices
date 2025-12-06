@@ -1,15 +1,26 @@
 package com.microservices.bookstore.order_service.clients.catalog_service;
 
 import com.microservices.bookstore.order_service.configuration.ApplicationProperties;
+import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
+
+import java.time.Duration;
 
 @Configuration
 public class CatalogServiceClientConfig {
 
     @Bean
     RestClient restClient(ApplicationProperties applicationProperties) {
+        ClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.simple()
+                .withCustomizer(customizer -> {
+                    customizer.setConnectTimeout(Duration.ofSeconds(5));
+                    customizer.setReadTimeout(Duration.ofSeconds(5));
+                })
+                .build();
+
         return RestClient.builder()
                 .baseUrl(applicationProperties.catalogServiceUrl())
                 .build();
