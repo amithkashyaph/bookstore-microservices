@@ -20,6 +20,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+    private static final List<String> DELIVERY_ALLOWED_COUNTRIES = List.of("INDIA", "USA", "GERMANY", "UK");
     private final OrderRepository orderRepository;
     private final OrderValidator orderValidator;
     private final OrderEventServiceImpl orderEventService;
@@ -50,5 +51,13 @@ public class OrderServiceImpl implements OrderService {
         for (Order order : orders) {
             this.process(order);
         }
+    }
+
+    private void process(Order order) {
+    }
+
+    private boolean canBeDelivered(Order order) {
+        return DELIVERY_ALLOWED_COUNTRIES.contains(
+                order.getDeliveryAddress().country().toUpperCase());
     }
 }
