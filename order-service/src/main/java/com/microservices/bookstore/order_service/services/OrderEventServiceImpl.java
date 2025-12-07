@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderEventServiceImpl {
     private static final Logger log = LoggerFactory.getLogger(OrderEventServiceImpl.class);
@@ -47,6 +49,14 @@ public class OrderEventServiceImpl {
 
     public void publishOrderEvents() {
         Sort sort = Sort.by("createdAt").ascending();
+        List<OrderEventEntity> orderEventEntityList = orderEventRepository.findAll(sort);
+        for(OrderEventEntity orderEventEntity: orderEventEntityList) {
+            this.publishEvent(orderEventEntity);
+            orderEventRepository.delete(orderEventEntity);
+        }
+    }
+
+    private void publishEvent(OrderEventEntity orderEventEntity) {
     }
 
 }
