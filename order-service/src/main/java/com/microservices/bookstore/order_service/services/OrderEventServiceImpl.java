@@ -1,6 +1,10 @@
 package com.microservices.bookstore.order_service.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservices.bookstore.order_service.dtos.OrderCreatedEvent;
+import com.microservices.bookstore.order_service.entities.OrderEventEntity;
+import com.microservices.bookstore.order_service.entities.enums.OrderEventType;
 import com.microservices.bookstore.order_service.queues.OrderEventPublisher;
 import com.microservices.bookstore.order_service.repositories.OrderEventRepository;
 import org.slf4j.Logger;
@@ -19,6 +23,25 @@ public class OrderEventServiceImpl {
         this.objectMapper = objectMapper;
         this.orderEventPublisher = orderEventPublisher;
         this.orderEventRepository = orderEventRepository;
+    }
+
+    void save(OrderCreatedEvent event) {
+        OrderEventEntity orderEventEntity = new OrderEventEntity();
+        orderEventEntity.setEventId(event.eventId());
+        orderEventEntity.setEventType(OrderEventType.ORDER_CREATED);
+        orderEventEntity.setOrderNumber(event.orderNumber());
+        orderEventEntity.setCreatedAt(event.createdAt());
+        orderEventEntity.setPayload(toJsonPayload(event));
+
+        orderEventRepository.save(orderEventEntity);
+    }
+
+    private String toJsonPayload(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
