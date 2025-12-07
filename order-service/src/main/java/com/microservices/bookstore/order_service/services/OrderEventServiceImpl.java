@@ -9,6 +9,7 @@ import com.microservices.bookstore.order_service.queues.OrderEventPublisher;
 import com.microservices.bookstore.order_service.repositories.OrderEventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,6 +43,10 @@ public class OrderEventServiceImpl {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void publishOrderEvents() {
+        Sort sort = Sort.by("createdAt").ascending();
     }
 
 }
