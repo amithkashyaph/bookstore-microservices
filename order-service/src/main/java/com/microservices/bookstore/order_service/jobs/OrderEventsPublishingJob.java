@@ -5,14 +5,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+
 @Component
 public class OrderEventsPublishingJob {
     private static final Logger log = LoggerFactory.getLogger(OrderEventsPublishingJob.class);
 
     private final OrderEventServiceImpl orderEventService;
 
-    OrderEventsPublishingJob(OrderEventServiceImpl orderEventService) {
+    public OrderEventsPublishingJob(OrderEventServiceImpl orderEventService) {
         this.orderEventService = orderEventService;
+    }
+
+    public void publishOrderEvents() {
+        log.info("Publishing events at: {}", Instant.now());
     }
 
 }
