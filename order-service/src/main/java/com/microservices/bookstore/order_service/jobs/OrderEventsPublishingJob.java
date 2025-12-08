@@ -18,7 +18,7 @@ public class OrderEventsPublishingJob {
         this.orderEventService = orderEventService;
     }
 
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "${orders.publish-order-events-job-cron}")
     public void publishOrderEvents() {
         log.info("Publishing events at: {}", Instant.now());
         orderEventService.publishOrderEvents();
