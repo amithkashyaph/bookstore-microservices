@@ -3,6 +3,7 @@ package com.microservices.bookstore.order_service.services;
 import com.microservices.bookstore.order_service.dtos.CreateOrderRequest;
 import com.microservices.bookstore.order_service.dtos.CreateOrderResponse;
 import com.microservices.bookstore.order_service.dtos.OrderCreatedEvent;
+import com.microservices.bookstore.order_service.dtos.OrderSummary;
 import com.microservices.bookstore.order_service.entities.Order;
 import com.microservices.bookstore.order_service.entities.enums.OrderStatus;
 import com.microservices.bookstore.order_service.repositories.OrderRepository;
@@ -45,6 +46,8 @@ public class OrderServiceImpl implements OrderService {
         return new CreateOrderResponse(savedOrder.getOrderNumber());
     }
 
+
+
     public void processNewOrders() {
         List<Order> orders = orderRepository.findByStatus(OrderStatus.NEW);
         log.info("Found {} new orders to process", orders.size());
@@ -54,6 +57,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void process(Order order) {
+        try {
+            if (canBeDelivered(order)) {
+                log.info("OrderNumber: {} can be delivered", order.getOrderNumber());
+                orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatus.DELIVERED);
+                orderEventService.save(OrderEventMapper.buildOrderDeliveredEvent(order));
+
+            } else {
+                log.info("OrderNumber: {} can not be delivered", order.getOrderNumber());
+                orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatus.CANCELLED);
+                orderEventService.save(
+                        OrderEventMapper.buildOrderCancelledEvent(order, "Can't deliver to the location"));
+            }
+        } catch (RuntimeException e) {
+            log.error("Failed to process Order with orderNumber: {}", order.getOrderNumber(), e);
+            orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatus.ERROR);
+            orderEventService.save(OrderEventMapper.buildOrderErrorEvent(order, e.getMessage()));
+        }
     }
 
     private boolean canBeDelivered(Order order) {
