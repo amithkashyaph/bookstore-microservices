@@ -46,7 +46,10 @@ public class OrderServiceImpl implements OrderService {
         return new CreateOrderResponse(savedOrder.getOrderNumber());
     }
 
-
+    @Override
+    public List<OrderSummary> fetchAllOrdersForUser(String username) {
+        return null;
+    }
 
     public void processNewOrders() {
         List<Order> orders = orderRepository.findByStatus(OrderStatus.NEW);
