@@ -14,5 +14,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     Optional<Order> findByOrderNumber(String orderNumber);
 
+    default void updateOrderStatus(String orderNumber, OrderStatus status) {
+        Order order = this.findByOrderNumber(orderNumber).orElseThrow();
+        order.setStatus(status);
+        this.save(order);
+    }
+
     List<Order> findByUserName(String username);
 }
