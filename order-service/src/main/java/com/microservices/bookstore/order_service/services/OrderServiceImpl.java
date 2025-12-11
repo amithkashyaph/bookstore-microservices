@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -48,7 +49,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderSummary> fetchAllOrdersForUser(String username) {
-        return null;
+        List<OrderSummary> orders = orderRepository.findByUserName(username);
+        return orders;
     }
 
     public void processNewOrders() {
