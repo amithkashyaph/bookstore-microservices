@@ -1,5 +1,5 @@
-SET @@auto_increment_increment = 50;
-SET @@auto_increment_offset = 1;
+SET SESSION auto_increment_increment = 50;
+SET SESSION auto_increment_offset = 1;
 
 CREATE TABLE orders (
     id BIGINT NOT NULL AUTO_INCREMENT,
