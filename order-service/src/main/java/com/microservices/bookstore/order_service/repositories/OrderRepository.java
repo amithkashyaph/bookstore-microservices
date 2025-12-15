@@ -1,8 +1,10 @@
 package com.microservices.bookstore.order_service.repositories;
 
+import com.microservices.bookstore.order_service.dtos.OrderSummary;
 import com.microservices.bookstore.order_service.entities.Order;
 import com.microservices.bookstore.order_service.entities.enums.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +22,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         this.save(order);
     }
 
-    List<Order> findByUserName(String username);
+    @Query("""
+            select new com.microservices.bookstore.order_service.dtos.OrderSummary(o.orderNumber, o.status)
+            from Order o
+            where o.userName = :userName
+            """)
+    List<OrderSummary> findByUserName(String userName);
 }
