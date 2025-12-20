@@ -35,6 +35,12 @@ public class OrderController {
         return new ResponseEntity<>(createOrderResponse, HttpStatus.CREATED);
     }
 
-
+    @GetMapping
+    public ResponseEntity<List<OrderSummary>> getAllOrdersForUser() {
+        String username = securityService.getLoggedInUserName();
+        log.info("Getting all orders for user: {}", username);
+        List<OrderSummary> orderSummaries = orderService.fetchAllOrdersForUser(username);
+        return ResponseEntity.ok(orderSummaries);
+    }
 
 }
