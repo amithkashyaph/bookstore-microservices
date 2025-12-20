@@ -3,6 +3,7 @@ package com.bookstore.microservices.notification_service.events;
 import com.bookstore.microservices.notification_service.entities.OrderCancelledEvent;
 import com.bookstore.microservices.notification_service.entities.OrderCreatedEvent;
 import com.bookstore.microservices.notification_service.entities.OrderDeliveredEvent;
+import com.bookstore.microservices.notification_service.entities.OrderErrorEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -22,5 +23,10 @@ public class OrderEventHandler {
     @RabbitListener(queues = "${notifications.cancelled-orders-queue}")
     void handleOrderCancelledEvent(OrderCancelledEvent event) {
         System.out.println("Order cancelled event : " + event);
+    }
+
+    @RabbitListener(queues = "${notifications.error-orders-queue}")
+    void handleOrderErrorEvent(OrderErrorEvent event) {
+        System.out.println("Order error event : " + event);
     }
 }
