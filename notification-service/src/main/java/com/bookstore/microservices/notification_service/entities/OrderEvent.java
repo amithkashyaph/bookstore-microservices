@@ -9,5 +9,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "order_events")
 public class OrderEvent {
-
+    @Id
+    private Long id;
+    private String eventId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
