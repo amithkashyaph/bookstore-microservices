@@ -2,6 +2,7 @@ package com.microservices.bookstore.order_service.controllers;
 
 import com.microservices.bookstore.order_service.dtos.CreateOrderRequest;
 import com.microservices.bookstore.order_service.dtos.CreateOrderResponse;
+import com.microservices.bookstore.order_service.dtos.OrderItemDto;
 import com.microservices.bookstore.order_service.dtos.OrderSummary;
 import com.microservices.bookstore.order_service.services.interfaces.OrderService;
 import com.microservices.bookstore.order_service.services.SecurityService;
@@ -42,5 +43,12 @@ public class OrderController {
         List<OrderSummary> orderSummaries = orderService.fetchAllOrdersForUser(username);
         return ResponseEntity.ok(orderSummaries);
     }
+
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<OrderItemDto> getByOrderNumber(@PathVariable(value = "orderNumber") String orderNumber) {
+        return null;
+    }
+
+
 
 }
