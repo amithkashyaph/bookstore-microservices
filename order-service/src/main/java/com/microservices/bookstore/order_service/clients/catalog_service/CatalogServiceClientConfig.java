@@ -14,7 +14,7 @@ public class CatalogServiceClientConfig {
 
     @Bean
     RestClient restClient(ApplicationProperties applicationProperties) {
-        ClientHttpRequestFactory requestFactory = ClientHttpRequestFactoryBuilder.simple()
+        ClientHttpRequestFactory clientHttpRequestFactory = ClientHttpRequestFactoryBuilder.simple()
                 .withCustomizer(customizer -> {
                     customizer.setConnectTimeout(Duration.ofSeconds(5));
                     customizer.setReadTimeout(Duration.ofSeconds(5));
@@ -23,6 +23,7 @@ public class CatalogServiceClientConfig {
 
         return RestClient.builder()
                 .baseUrl(applicationProperties.catalogServiceUrl())
+                .requestFactory(clientHttpRequestFactory)
                 .build();
     }
 }
