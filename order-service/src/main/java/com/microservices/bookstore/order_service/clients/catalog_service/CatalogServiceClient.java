@@ -1,6 +1,7 @@
 package com.microservices.bookstore.order_service.clients.catalog_service;
 
 import com.microservices.bookstore.order_service.clients.catalog_service.dtos.ProductDto;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,8 @@ public class CatalogServiceClient {
         this.restClient = restClient;
     }
 
-    @Retry(name = "catalog-service")
+    @CircuitBreaker(name = "catalog-service")
+    @Retry(name = "catalog-service", fallbackMethod = "getByProductCodeFallback")
     public Optional<ProductDto> getProductByCode(String code) {
         log.info("Fetching product for code: {}", code);
 
@@ -30,5 +32,10 @@ public class CatalogServiceClient {
                 .body(ProductDto.class);
 
         return Optional.ofNullable(product);
+    }
+
+    Optional<ProductDto> getByProductCodeFallback(String code, Throwable t) {
+        log.error("Catalog Service client failure for code: {}", code);
+        return Optional.empty();
     }
 }
