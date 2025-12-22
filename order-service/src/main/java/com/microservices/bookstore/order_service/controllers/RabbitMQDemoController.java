@@ -12,7 +12,6 @@ public class RabbitMQDemoController {
     private RabbitTemplate rabbitTemplate;
     private ApplicationProperties applicationProperties;
 
-
     RabbitMQDemoController(RabbitTemplate rabbitTemplate, ApplicationProperties applicationProperties) {
         this.rabbitTemplate = rabbitTemplate;
         this.applicationProperties = applicationProperties;
@@ -20,9 +19,11 @@ public class RabbitMQDemoController {
 
     @PostMapping("/send")
     public void sendMessage(@RequestBody MyMessage message) {
-        rabbitTemplate.convertAndSend(applicationProperties.orderEventsExchange(), message.routingKey(), message.payload());
+        rabbitTemplate.convertAndSend(
+                applicationProperties.orderEventsExchange(), message.routingKey(), message.payload());
     }
 }
 
 record MyMessage(String routingKey, MyPayload payload) {}
+
 record MyPayload(String content) {}
