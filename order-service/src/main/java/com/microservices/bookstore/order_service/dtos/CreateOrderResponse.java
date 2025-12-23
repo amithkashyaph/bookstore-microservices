@@ -1,4 +1,3 @@
 package com.microservices.bookstore.order_service.dtos;
 
-public record CreateOrderResponse(String orderNumber) {
-}
+public record CreateOrderResponse(String orderNumber) {}
