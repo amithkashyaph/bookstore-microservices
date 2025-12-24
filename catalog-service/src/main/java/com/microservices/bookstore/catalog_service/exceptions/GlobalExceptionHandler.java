@@ -26,5 +26,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-
+    @ExceptionHandler(Exception.class)
+    ProblemDetail handleUnhandledException(Exception exception) {
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        problemDetail.setTitle("INTERNAL_SERVER_ERROR");
+        problemDetail.setTitle("ISE_TYPE");
+        problemDetail.setProperty("service", SERVICE_NAME);
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+    }
 }
