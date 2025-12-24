@@ -15,5 +15,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final URI BAD_REQUEST_TYPE = URI.create("https://api.bookstore.com/errors/bad-request");
     private static final String SERVICE_NAME = "catalog-service";
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    ProblemDetail handleProductNotFoundException(ProductNotFoundException exception) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+        problemDetail.setTitle("Product not found");
+        problemDetail.setTitle("NOT_FOUND_TYPE");
+        problemDetail.setProperty("service", SERVICE_NAME);
+        problemDetail.setProperty("error_category", "Generic");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+    }
+
 
 }
