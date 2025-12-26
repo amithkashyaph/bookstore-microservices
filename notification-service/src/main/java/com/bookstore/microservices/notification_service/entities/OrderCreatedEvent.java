@@ -1,0 +1,14 @@
+package com.bookstore.microservices.notification_service.entities;
+
+import java.time.LocalDateTime;
+import java.util.Set;
+
+public record OrderCreatedEvent(
+        String eventId,
+        String orderNumber,
+        Set<OrderItemDto> items,
+        Customer customer,
+        Address deliveryAddress,
+        LocalDateTime createdAt
+) {
+}
