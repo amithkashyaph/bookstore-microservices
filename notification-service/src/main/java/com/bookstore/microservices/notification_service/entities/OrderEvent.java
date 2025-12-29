@@ -1,8 +1,6 @@
 package com.bookstore.microservices.notification_service.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +8,21 @@ import java.time.LocalDateTime;
 @Table(name = "order_events")
 public class OrderEvent {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String eventId;
-    private LocalDateTime createdAt;
+
+    @Column(name = "created_at" ,nullable = false, updatable = false)
+    private LocalDateTime createdAt =  LocalDateTime.now();
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public OrderEvent(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public OrderEvent() {}
 }
