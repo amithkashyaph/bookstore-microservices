@@ -1,19 +1,15 @@
 package com.microservices.bookstore.order_service.controllers;
 
-import com.microservices.bookstore.order_service.dtos.CreateOrderRequest;
-import com.microservices.bookstore.order_service.dtos.CreateOrderResponse;
-import com.microservices.bookstore.order_service.dtos.OrderItemDto;
-import com.microservices.bookstore.order_service.dtos.OrderSummary;
-import com.microservices.bookstore.order_service.services.interfaces.OrderService;
+import com.microservices.bookstore.order_service.dtos.*;
 import com.microservices.bookstore.order_service.services.SecurityService;
+import com.microservices.bookstore.order_service.services.interfaces.OrderService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -45,10 +41,10 @@ public class OrderController {
     }
 
     @GetMapping("/{orderNumber}")
-    public ResponseEntity<OrderItemDto> getByOrderNumber(@PathVariable(value = "orderNumber") String orderNumber) {
-        return null;
+    public ResponseEntity<OrderDTO> getByOrderNumber(@PathVariable(value = "orderNumber") String orderNumber) {
+        log.info("Fetching order info for order number: {}", orderNumber);
+        String username = securityService.getLoggedInUserName();
+        OrderDTO orderDTO = orderService.fetchOrderInfoForUserAndOrderNumber(username, orderNumber);
+        return ResponseEntity.ok(orderDTO);
     }
-
-
-
 }
