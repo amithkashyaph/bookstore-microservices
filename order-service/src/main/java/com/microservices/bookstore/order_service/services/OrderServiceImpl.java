@@ -1,36 +1,35 @@
 package com.microservices.bookstore.order_service.services;
 
-import com.microservices.bookstore.order_service.dtos.CreateOrderRequest;
-import com.microservices.bookstore.order_service.dtos.CreateOrderResponse;
-import com.microservices.bookstore.order_service.dtos.OrderCreatedEvent;
-import com.microservices.bookstore.order_service.dtos.OrderSummary;
+import com.microservices.bookstore.order_service.dtos.*;
 import com.microservices.bookstore.order_service.entities.Order;
 import com.microservices.bookstore.order_service.entities.enums.OrderStatus;
+import com.microservices.bookstore.order_service.exceptions.OrderNotFoundException;
 import com.microservices.bookstore.order_service.repositories.OrderRepository;
 import com.microservices.bookstore.order_service.services.interfaces.OrderService;
 import com.microservices.bookstore.order_service.utils.OrderEventMapper;
 import com.microservices.bookstore.order_service.utils.OrderMapper;
 import com.microservices.bookstore.order_service.utils.OrderValidator;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
     private static final List<String> DELIVERY_ALLOWED_COUNTRIES = List.of("INDIA", "USA", "GERMANY", "UK");
     private final OrderRepository orderRepository;
     private final OrderValidator orderValidator;
     private final OrderEventServiceImpl orderEventService;
 
-    OrderServiceImpl(OrderRepository orderRepository, OrderValidator orderValidator, OrderEventServiceImpl orderEventService) {
+    OrderServiceImpl(
+            OrderRepository orderRepository, OrderValidator orderValidator, OrderEventServiceImpl orderEventService) {
         this.orderRepository = orderRepository;
         this.orderValidator = orderValidator;
         this.orderEventService = orderEventService;
     }
+
     @Override
     public CreateOrderResponse createOrder(String username, CreateOrderRequest createOrderRequest) {
         orderValidator.validate(createOrderRequest);
@@ -50,6 +49,15 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderSummary> fetchAllOrdersForUser(String username) {
         List<OrderSummary> orders = orderRepository.findByUserName(username);
         return orders;
+    }
+
+    @Override
+    public OrderDTO fetchOrderInfoForUserAndOrderNumber(String username, String orderNumber) {
+        Order orderDetails = orderRepository
+                .findByUserNameAndOrderNumber(username, orderNumber)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found for orderNumber " + orderNumber));
+        OrderDTO orderDTO = OrderMapper.convertToDTO(orderDetails);
+        return orderDTO;
     }
 
     public void processNewOrders() {
