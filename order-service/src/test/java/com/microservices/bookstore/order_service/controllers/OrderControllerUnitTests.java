@@ -38,5 +38,27 @@ public class OrderControllerUnitTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @BeforeEach
+    void setUp() {
+        given(securityService.getLoggedInUserName()).willReturn("siva");
+    }
 
+    @ParameterizedTest(name = "[{index}]-{0}")
+    @MethodSource("createOrderRequestProvider")
+    void shouldReturnBadRequestWhenOrderPayloadIsInvalid(CreateOrderRequest request) throws Exception {
+        given(orderService.createOrder(eq("siva"), any(CreateOrderRequest.class)))
+                .willReturn(null);
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    static Stream<Arguments> createOrderRequestProvider() {
+        return Stream.of(
+                arguments(named("Order with Invalid Customer", createOrderRequestWithInvalidCustomer())),
+                arguments(named("Order with Invalid Delivery Address", createOrderRequestWithInvalidDeliveryAddress())),
+                arguments(named("Order with No Items", createOrderRequestWithNoItems())));
+    }
 }
