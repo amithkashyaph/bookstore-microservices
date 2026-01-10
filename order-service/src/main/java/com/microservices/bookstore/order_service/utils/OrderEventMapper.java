@@ -28,5 +28,16 @@ public class OrderEventMapper {
                 LocalDateTime.now());
     }
 
+    public static OrderCancelledEvent buildOrderCancelledEvent(Order order, String reason) {
+        return new OrderCancelledEvent(
+                UUID.randomUUID().toString(),
+                order.getOrderNumber(),
+                getOrderItems(order),
+                order.getCustomer(),
+                order.getDeliveryAddress(),
+                reason,
+                LocalDateTime.now());
+    }
+
 
 }
