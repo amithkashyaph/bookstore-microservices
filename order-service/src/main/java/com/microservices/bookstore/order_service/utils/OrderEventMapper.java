@@ -18,4 +18,15 @@ public class OrderEventMapper {
                 LocalDateTime.now());
     }
 
+    public static OrderDeliveredEvent buildOrderDeliveredEvent(Order order) {
+        return new OrderDeliveredEvent(
+                UUID.randomUUID().toString(),
+                order.getOrderNumber(),
+                getOrderItems(order),
+                order.getCustomer(),
+                order.getDeliveryAddress(),
+                LocalDateTime.now());
+    }
+
+
 }
