@@ -39,5 +39,16 @@ public class OrderEventMapper {
                 LocalDateTime.now());
     }
 
+    public static OrderErrorEvent buildOrderErrorEvent(Order order, String reason) {
+        return new OrderErrorEvent(
+                UUID.randomUUID().toString(),
+                order.getOrderNumber(),
+                getOrderItems(order),
+                order.getCustomer(),
+                order.getDeliveryAddress(),
+                reason,
+                LocalDateTime.now());
+    }
+
 
 }
