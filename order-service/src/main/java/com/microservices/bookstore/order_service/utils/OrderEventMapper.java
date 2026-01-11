@@ -50,5 +50,9 @@ public class OrderEventMapper {
                 LocalDateTime.now());
     }
 
-
+    private static Set<OrderItemDto> getOrderItems(Order order) {
+        return order.getOrderItems().stream()
+                .map(item -> new OrderItemDto(item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
+                .collect(Collectors.toSet());
+    }
 }
