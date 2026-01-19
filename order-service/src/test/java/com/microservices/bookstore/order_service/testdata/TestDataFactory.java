@@ -35,4 +35,12 @@ public class TestDataFactory {
                 .create();
     }
 
+    public static CreateOrderRequest createOrderRequestWithInvalidDeliveryAddress() {
+        return Instancio.of(CreateOrderRequest.class)
+                .generate(field(Customer::email), gen -> gen.text().pattern("#c#c#c#c#d#d@mail.com"))
+                .set(field(Address::country), "")
+                .set(field(CreateOrderRequest::items), VALID_ORDER_ITEMS)
+                .create();
+    }
+
 }
