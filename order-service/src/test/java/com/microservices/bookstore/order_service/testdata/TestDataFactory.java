@@ -12,5 +12,18 @@ import java.util.Set;
 import org.instancio.Instancio;
 
 public class TestDataFactory {
+    static final List<String> VALID_COUNTRIES = List.of("India", "Germany");
+    static final Set<OrderItemDto> VALID_ORDER_ITEMS =
+            Set.of(new OrderItemDto("P100", "Product 1", new BigDecimal("25.50"), 1));
+    static final Set<OrderItemDto> INVALID_ORDER_ITEMS =
+            Set.of(new OrderItemDto("ABCD", "Product 1", new BigDecimal("25.50"), 1));
+
+    public static CreateOrderRequest createValidOrderRequest() {
+        return Instancio.of(CreateOrderRequest.class)
+                .generate(field(Customer::email), gen -> gen.text().pattern("#a#a#a#a#a#a@mail.com"))
+                .set(field(CreateOrderRequest::items), VALID_ORDER_ITEMS)
+                .generate(field(Address::country), gen -> gen.oneOf(VALID_COUNTRIES))
+                .create();
+    }
 
 }
