@@ -43,4 +43,11 @@ public class TestDataFactory {
                 .create();
     }
 
+    public static CreateOrderRequest createOrderRequestWithNoItems() {
+        return Instancio.of(CreateOrderRequest.class)
+                .generate(field(Customer::email), gen -> gen.text().pattern("#c#c#c#c#d#d@mail.com"))
+                .generate(field(Address::country), gen -> gen.oneOf(VALID_COUNTRIES))
+                .set(field(CreateOrderRequest::items), Set.of())
+                .create();
+    }
 }
