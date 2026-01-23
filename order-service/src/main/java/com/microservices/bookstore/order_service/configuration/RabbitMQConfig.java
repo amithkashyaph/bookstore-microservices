@@ -22,5 +22,9 @@ public class RabbitMQConfig {
         return new DirectExchange(applicationProperties.orderEventsExchange());
     }
 
+    @Bean
+    Queue newOrdersQueue() {
+        return QueueBuilder.durable(applicationProperties.newOrdersQueue()).build();
+    }
 
 }
