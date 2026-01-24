@@ -45,5 +45,10 @@ public class RabbitMQConfig {
                 .with(applicationProperties.deliveredOrdersQueue());
     }
 
+    @Bean
+    Queue cancelledOrdersQueue() {
+        return QueueBuilder.durable(applicationProperties.cancelledOrdersQueue())
+                .build();
+    }
 
 }
