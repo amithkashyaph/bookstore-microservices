@@ -38,4 +38,12 @@ public class RabbitMQConfig {
                 .build();
     }
 
+    @Bean
+    Binding deliveredOrdersQueueBinding() {
+        return BindingBuilder.bind(deliveredOrdersQueue())
+                .to(exchange())
+                .with(applicationProperties.deliveredOrdersQueue());
+    }
+
+
 }
