@@ -17,5 +17,12 @@ public class RabbitMQConfig {
         this.applicationProperties = applicationProperties;
     }
 
+    @Bean
+    DirectExchange exchange() {
+        return new DirectExchange(applicationProperties.orderEventsExchange());
+    }
+
+
+
 }
 
