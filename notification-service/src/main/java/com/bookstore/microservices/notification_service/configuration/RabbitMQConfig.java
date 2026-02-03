@@ -37,6 +37,11 @@ public class RabbitMQConfig {
         return QueueBuilder.durable(applicationProperties.deliveredOrdersQueue()).build();
     }
 
+    @Bean
+    Binding deliveredOrdersQueueBinding() {
+        return BindingBuilder.bind(deliveredOrdersQueue()).to(exchange()).with(applicationProperties.deliveredOrdersQueue());
+    }
+
 
 
 }
