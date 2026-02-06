@@ -57,6 +57,11 @@ public class RabbitMQConfig {
         return QueueBuilder.durable(applicationProperties.errorOrdersQueue()).build();
     }
 
+    @Bean
+    Binding errorOrdersQueueBinding() {
+        return BindingBuilder.bind(errorOrdersQueue()).to(exchange()).with(applicationProperties.errorOrdersQueue());
+    }
+
 
 
 }
