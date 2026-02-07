@@ -69,6 +69,11 @@ public class RabbitMQConfig {
         return rabbitTemplate;
     }
 
+    @Bean
+    public Jackson2JsonMessageConverter jacksonConverter(ObjectMapper mapper) {
+        return new Jackson2JsonMessageConverter(mapper);
+    }
+
 
 
 }
