@@ -21,5 +21,10 @@ class ProductController {
         this.productService = productService;
     }
 
+    @GetMapping
+    PagedResult<ProductResponseDTO> getAllProducts(@RequestParam(name = "page", defaultValue = "1") int pageNumber) {
+        return productService.getAllProducts(pageNumber);
+    }
+
 
 }
