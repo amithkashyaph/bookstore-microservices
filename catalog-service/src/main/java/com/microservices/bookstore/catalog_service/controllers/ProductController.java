@@ -26,5 +26,12 @@ class ProductController {
         return productService.getAllProducts(pageNumber);
     }
 
+    @GetMapping("/{code}")
+    ResponseEntity<ProductResponseDTO> getProductByCode(@PathVariable String code) {
+        log.info("Fetching product for code: {}", code);
+        ProductResponseDTO productResponse = productService.getProductByCode(code);
+        return new ResponseEntity<>(productResponse, HttpStatus.OK);
+    }
+
 
 }
