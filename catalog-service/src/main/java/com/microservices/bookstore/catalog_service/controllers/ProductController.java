@@ -33,5 +33,11 @@ class ProductController {
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
-
+    void sleep() {
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
