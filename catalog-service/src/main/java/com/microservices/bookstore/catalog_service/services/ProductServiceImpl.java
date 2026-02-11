@@ -17,5 +17,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private ProductRepository productRepository;
+    private ApplicationProperties applicationProperties;
+
+    public ProductServiceImpl(ProductRepository productRepository, ApplicationProperties applicationProperties) {
+        this.productRepository = productRepository;
+        this.applicationProperties = applicationProperties;
+    }
+
 
 }
