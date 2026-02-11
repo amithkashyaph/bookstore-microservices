@@ -25,6 +25,24 @@ public class NotificationService {
         this.emailSender = mailSender;
     }
 
+    public void sendOrderCreatedNotification(OrderCreatedEvent event) {
+        String message =
+                """
+                ===================================================
+                Order Created Notification
+                ----------------------------------------------------
+                Dear %s,
+                Your order with orderNumber: %s has been created successfully.
+
+                Thanks,
+                BookStore Team
+                ===================================================
+                """
+                        .formatted(event.customer().name(), event.orderNumber());
+        log.info("\n{}", message);
+        sendEmail(event.customer().email(), "Order Created Notification", message);
+    }
+
 
 
     private void sendEmail(String recipient, String subject, String content) {
