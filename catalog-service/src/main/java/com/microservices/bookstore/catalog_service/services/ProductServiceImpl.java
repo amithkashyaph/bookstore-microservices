@@ -25,5 +25,26 @@ public class ProductServiceImpl implements ProductService {
         this.applicationProperties = applicationProperties;
     }
 
+    @Override
+    public PagedResult<ProductResponseDTO> getAllProducts(int pageNo) {
+        pageNo = pageNo <= 1 ? 0 : pageNo - 1;
+        Sort sort = Sort.by("name").ascending();
+        Pageable pageable = PageRequest.of(pageNo, applicationProperties.pageSize(), sort);
+        Page<ProductResponseDTO> products =
+                productRepository.findAll(pageable).map(ProductEntityMapper::toProductResponseDTO);
+
+        PagedResult<ProductResponseDTO> productPagedResult = new PagedResult<>(
+                products.getContent(),
+                products.getTotalElements(),
+                products.getNumber() + 1,
+                products.getTotalPages(),
+                products.isFirst(),
+                products.isLast(),
+                products.hasNext(),
+                products.hasPrevious());
+
+        return productPagedResult;
+    }
+
 
 }
