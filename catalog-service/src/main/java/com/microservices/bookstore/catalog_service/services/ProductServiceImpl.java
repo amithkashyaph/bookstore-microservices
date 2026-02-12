@@ -46,5 +46,9 @@ public class ProductServiceImpl implements ProductService {
         return productPagedResult;
     }
 
-
+    @Override
+    public ProductResponseDTO getProductByCode(String code) {
+        Product product = productRepository.findByCode(code).orElseThrow(() -> ProductNotFoundException.forCode(code));
+        return ProductEntityMapper.toProductResponseDTO(product);
+    }
 }
