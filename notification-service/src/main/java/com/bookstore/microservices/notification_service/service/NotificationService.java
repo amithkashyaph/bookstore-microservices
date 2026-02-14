@@ -80,7 +80,24 @@ public class NotificationService {
         sendEmail(event.customer().email(), "Order Cancelled Notification", message);
     }
 
+    public void sendOrderErrorEventNotification(OrderErrorEvent event) {
+        String message =
+                """
+                ===================================================
+                Order Processing Failure Notification
+                ----------------------------------------------------
+                Hi %s,
+                The order processing failed for orderNumber: %s.
+                Reason: %s
 
+                Thanks,
+                BookStore Team
+                ===================================================
+                """
+                        .formatted(properties.supportEmail(), event.orderNumber(), event.reason());
+        log.info("\n{}", message);
+        sendEmail(properties.supportEmail(), "Order Processing Failure Notification", message);
+    }
 
     private void sendEmail(String recipient, String subject, String content) {
         try {
