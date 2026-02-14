@@ -43,6 +43,24 @@ public class NotificationService {
         sendEmail(event.customer().email(), "Order Created Notification", message);
     }
 
+    public void sendOrderDeliveredNotification(OrderDeliveredEvent event) {
+        String message =
+                """
+                ===================================================
+                Order Delivered Notification
+                ----------------------------------------------------
+                Dear %s,
+                Your order with orderNumber: %s has been delivered successfully.
+
+                Thanks,
+                BookStore Team
+                ===================================================
+                """
+                        .formatted(event.customer().name(), event.orderNumber());
+        log.info("\n{}", message);
+        sendEmail(event.customer().email(), "Order Delivered Notification", message);
+    }
+
 
 
     private void sendEmail(String recipient, String subject, String content) {
