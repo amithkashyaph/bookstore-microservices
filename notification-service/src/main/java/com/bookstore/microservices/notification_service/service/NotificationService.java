@@ -61,6 +61,25 @@ public class NotificationService {
         sendEmail(event.customer().email(), "Order Delivered Notification", message);
     }
 
+    public void sendOrderCancelledNotification(OrderCancelledEvent event) {
+        String message =
+                """
+                ===================================================
+                Order Cancelled Notification
+                ----------------------------------------------------
+                Dear %s,
+                Your order with orderNumber: %s has been cancelled.
+                Reason: %s
+
+                Thanks,
+                BookStore Team
+                ===================================================
+                """
+                        .formatted(event.customer().name(), event.orderNumber(), event.reason());
+        log.info("\n{}", message);
+        sendEmail(event.customer().email(), "Order Cancelled Notification", message);
+    }
+
 
 
     private void sendEmail(String recipient, String subject, String content) {
