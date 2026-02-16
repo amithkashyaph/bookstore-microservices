@@ -27,4 +27,9 @@ public class OrderEventPublisher {
         log.info("routing key used {}", applicationProperties.newOrdersQueue());
         this.send(applicationProperties.newOrdersQueue(), orderCreatedEvent);
     }
+
+    public void publish(OrderDeliveredEvent event) {
+        this.send(applicationProperties.deliveredOrdersQueue(), event);
+    }
+
 }
