@@ -32,4 +32,9 @@ public class OrderEventPublisher {
         this.send(applicationProperties.deliveredOrdersQueue(), event);
     }
 
+    public void publish(OrderCancelledEvent event) {
+        this.send(applicationProperties.cancelledOrdersQueue(), event);
+    }
+
+
 }
