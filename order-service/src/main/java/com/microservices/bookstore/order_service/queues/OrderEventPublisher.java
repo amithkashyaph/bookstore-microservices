@@ -36,5 +36,9 @@ public class OrderEventPublisher {
         this.send(applicationProperties.cancelledOrdersQueue(), event);
     }
 
+    public void publish(OrderErrorEvent event) {
+        this.send(applicationProperties.errorOrdersQueue(), event);
+    }
+
 
 }
