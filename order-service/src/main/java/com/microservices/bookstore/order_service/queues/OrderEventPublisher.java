@@ -40,5 +40,7 @@ public class OrderEventPublisher {
         this.send(applicationProperties.errorOrdersQueue(), event);
     }
 
-
+    public void send(String routingKey, Object payload) {
+        this.rabbitTemplate.convertAndSend(applicationProperties.orderEventsExchange(), routingKey, payload);
+    }
 }
