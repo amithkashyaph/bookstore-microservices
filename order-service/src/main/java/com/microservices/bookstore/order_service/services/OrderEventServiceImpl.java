@@ -44,6 +44,16 @@ public class OrderEventServiceImpl {
         orderEventRepository.save(orderEventEntity);
     }
 
+    void save(OrderDeliveredEvent event) {
+        OrderEventEntity orderEvent = new OrderEventEntity();
+        orderEvent.setEventId(event.eventId());
+        orderEvent.setEventType(OrderEventType.ORDER_DELIVERED);
+        orderEvent.setOrderNumber(event.orderNumber());
+        orderEvent.setCreatedAt(event.createdAt());
+        orderEvent.setPayload(toJsonPayload(event));
+        this.orderEventRepository.save(orderEvent);
+    }
+
 
 
     private String toJsonPayload(Object object) {
