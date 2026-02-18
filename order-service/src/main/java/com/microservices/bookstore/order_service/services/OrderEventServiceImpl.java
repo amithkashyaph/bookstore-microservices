@@ -2,17 +2,19 @@ package com.microservices.bookstore.order_service.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservices.bookstore.order_service.dtos.OrderCancelledEvent;
 import com.microservices.bookstore.order_service.dtos.OrderCreatedEvent;
+import com.microservices.bookstore.order_service.dtos.OrderDeliveredEvent;
+import com.microservices.bookstore.order_service.dtos.OrderErrorEvent;
 import com.microservices.bookstore.order_service.entities.OrderEventEntity;
 import com.microservices.bookstore.order_service.entities.enums.OrderEventType;
 import com.microservices.bookstore.order_service.queues.OrderEventPublisher;
 import com.microservices.bookstore.order_service.repositories.OrderEventRepository;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class OrderEventServiceImpl {
@@ -22,7 +24,10 @@ public class OrderEventServiceImpl {
 
     private final ObjectMapper objectMapper;
 
-    public OrderEventServiceImpl(OrderEventRepository orderEventRepository, OrderEventPublisher orderEventPublisher, ObjectMapper objectMapper) {
+    public OrderEventServiceImpl(
+            OrderEventRepository orderEventRepository,
+            OrderEventPublisher orderEventPublisher,
+            ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         this.orderEventPublisher = orderEventPublisher;
         this.orderEventRepository = orderEventRepository;
@@ -39,6 +44,8 @@ public class OrderEventServiceImpl {
         orderEventRepository.save(orderEventEntity);
     }
 
+
+
     private String toJsonPayload(Object object) {
         try {
             return objectMapper.writeValueAsString(object);
@@ -50,13 +57,22 @@ public class OrderEventServiceImpl {
     public void publishOrderEvents() {
         Sort sort = Sort.by("createdAt").ascending();
         List<OrderEventEntity> orderEventEntityList = orderEventRepository.findAll(sort);
-        for(OrderEventEntity orderEventEntity: orderEventEntityList) {
+        log.info("Publishing events for {} orders", orderEventEntityList.size());
+        for (OrderEventEntity orderEventEntity : orderEventEntityList) {
             this.publishEvent(orderEventEntity);
             orderEventRepository.delete(orderEventEntity);
         }
     }
 
     private void publishEvent(OrderEventEntity orderEventEntity) {
+
     }
 
+    private <T> T fromJsonPayload(String json, Class<T> type) {
+        try {
+            return objectMapper.readValue(json, type);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
