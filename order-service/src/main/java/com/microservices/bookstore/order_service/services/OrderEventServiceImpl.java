@@ -56,6 +56,8 @@ public class OrderEventServiceImpl {
 
 
 
+
+
     private String toJsonPayload(Object object) {
         try {
             return objectMapper.writeValueAsString(object);
@@ -75,7 +77,22 @@ public class OrderEventServiceImpl {
     }
 
     private void publishEvent(OrderEventEntity orderEventEntity) {
+        OrderEventType orderEventType = orderEventEntity.getEventType();
+        log.info("Publishing event of type {}", orderEventType);
+        switch (orderEventType) {
+            case ORDER_CREATED:
+                OrderCreatedEvent orderCreatedEvent =
+                        fromJsonPayload(orderEventEntity.getPayload(), OrderCreatedEvent.class);
+                orderEventPublisher.publish(orderCreatedEvent);
+                break;
 
+            case ORDER_DELIVERED:
+                OrderDeliveredEvent orderDeliveredEvent =
+                        fromJsonPayload(orderEventEntity.getPayload(), OrderDeliveredEvent.class);
+                orderEventPublisher.publish(orderDeliveredEvent);
+                break;
+
+        }
     }
 
     private <T> T fromJsonPayload(String json, Class<T> type) {
