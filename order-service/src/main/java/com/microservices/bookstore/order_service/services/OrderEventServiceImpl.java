@@ -56,8 +56,6 @@ public class OrderEventServiceImpl {
 
 
 
-
-
     private String toJsonPayload(Object object) {
         try {
             return objectMapper.writeValueAsString(object);
@@ -91,7 +89,17 @@ public class OrderEventServiceImpl {
                         fromJsonPayload(orderEventEntity.getPayload(), OrderDeliveredEvent.class);
                 orderEventPublisher.publish(orderDeliveredEvent);
                 break;
-
+            case ORDER_CANCELLED:
+                OrderCancelledEvent orderCancelledEvent =
+                        fromJsonPayload(orderEventEntity.getPayload(), OrderCancelledEvent.class);
+                orderEventPublisher.publish(orderCancelledEvent);
+                break;
+            case ORDER_PROCESSING_FAILED:
+                OrderErrorEvent orderErrorEvent = fromJsonPayload(orderEventEntity.getPayload(), OrderErrorEvent.class);
+                orderEventPublisher.publish(orderErrorEvent);
+                break;
+            default:
+                log.warn("Unsupported OrderEventType: {}", orderEventType);
         }
     }
 
