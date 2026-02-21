@@ -64,7 +64,15 @@ public class OrderEventServiceImpl {
         this.orderEventRepository.save(orderEvent);
     }
 
-
+    void save(OrderErrorEvent event) {
+        OrderEventEntity orderEvent = new OrderEventEntity();
+        orderEvent.setEventId(event.eventId());
+        orderEvent.setEventType(OrderEventType.ORDER_PROCESSING_FAILED);
+        orderEvent.setOrderNumber(event.orderNumber());
+        orderEvent.setCreatedAt(event.createdAt());
+        orderEvent.setPayload(toJsonPayload(event));
+        this.orderEventRepository.save(orderEvent);
+    }
 
     private String toJsonPayload(Object object) {
         try {
